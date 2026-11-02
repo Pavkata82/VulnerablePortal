@@ -1,0 +1,13 @@
+{
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "tailwindCSS.suggestions": true,
+  "tailwindCSS.experimental.configFile": "frontend/src/input.css",
+  "tailwindCSS.includeLanguages": {
+    "jinja-html": "html"
+  }
+}

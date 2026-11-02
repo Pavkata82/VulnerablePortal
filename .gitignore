@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# Environment variables
+.env
+
+# Database
+*.db
+
+# Node.js
+node_modules/
+
+# Generated Tailwind CSS (optional)
+# frontend/css/tailwind.css

@@ -1,0 +1,50 @@
+{% extends "base.html" %} {% block title %}Home - VulnerablePortal{% endblock %}
+{% block content %}
+
+<section
+  class="relative flex min-h-[calc(100vh-76px)] items-center justify-center overflow-hidden bg-slate-900 px-6 py-16 text-white"
+>
+  <div
+    class="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-blue-600/20 blur-3xl"
+  ></div>
+
+  <div class="relative mx-auto max-w-5xl text-center">
+    <span
+      class="inline-flex items-center rounded-full border border-blue-400/30 bg-blue-400/10 px-4 py-2 text-sm font-medium text-blue-300"
+    >
+      Web Application Security Research
+    </span>
+
+    <h1
+      class="mt-8 text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-7xl"
+    >
+      Welcome to
+      <span class="block text-blue-400">VulnerablePortal</span>
+    </h1>
+
+    <p
+      class="mx-auto mt-8 max-w-2xl text-lg leading-relaxed text-slate-300 sm:text-xl"
+    >
+      Explore a vulnerable web application developed for cybersecurity research,
+      vulnerability testing and security improvement.
+    </p>
+
+    <div class="mt-12 flex flex-col justify-center gap-4 sm:flex-row">
+      <a
+        href="/login"
+        class="rounded-lg bg-blue-600 px-8 py-4 font-semibold text-white transition hover:bg-blue-500"
+      >
+        Login to Your Account
+      </a>
+
+      <a
+        href="/register"
+        class="rounded-lg border border-slate-500 bg-white/5 px-8 py-4 font-semibold text-white transition hover:border-white hover:bg-white/10"
+      >
+        Create an Account
+      </a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
