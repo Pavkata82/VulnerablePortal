@@ -1,0 +1,49 @@
+{% extends "base.html" %} {% block title %}Dashboard - VulnerablePortal{%
+endblock %} {% block content %}
+
+<section class="min-h-[calc(100vh-76px)] px-6 py-12">
+  <div class="mx-auto max-w-6xl">
+    <!-- Dashboard Heading -->
+    <div class="mb-10">
+      <p class="text-2xl font-semibold text-blue-600">Add Comment</p>
+
+      <p class="mt-2 text-slate-500">Add your opinion here.</p>
+    </div>
+
+    <!-- User Information -->
+    <div class="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+      <h2 class="text-xl font-bold text-slate-900">Comments Information</h2>
+
+      <p class="mt-1 text-sm text-slate-500">Website's comments</p>
+
+      <div id="message" class="mt-5 text-sm"></div>
+
+      <form id="register-form" onsubmit="addComment(event)">
+        <div class="mt-8 mb-8 grid gap-6 sm:grid-cols-2">
+          <input
+            class="rounded-xl bg-slate-50 p-5 outline-none text-sm font-medium text-slate-500"
+            id="username"
+            placeholder="Username"
+          />
+
+          <input
+            class="rounded-xl bg-slate-50 p-5 outline-none text-sm font-medium text-slate-500"
+            id="content"
+            placeholder="Comment"
+          />
+        </div>
+
+        <button
+          type="submit"
+          class="w-full rounded-lg bg-blue-600 px-4 py-3 font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200"
+        >
+          Add Comment
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+{% endblock %} {% block scripts %}
+<script src="/js/add_comment.js"></script>
+{% endblock %}
