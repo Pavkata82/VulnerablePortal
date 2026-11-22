@@ -31,9 +31,8 @@ def initialize_database():
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS comments (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER NOT NULL,
-            content TEXT NOT NULL,
-            FOREIGN KEY (user_id) REFERENCES users(id)
+            username TEXT NOT NULL,
+            content TEXT NOT NULL
         )
     """)
 
