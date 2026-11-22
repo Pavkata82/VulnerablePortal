@@ -27,6 +27,21 @@
             Home
           </a>
 
+          {% if session.get("user_id") %}
+          <a
+            href="/dashboard"
+            class="text-slate-300 transition hover:text-white"
+          >
+            Dashboard
+          </a>
+
+          <a
+            onclick="logoutUser()"
+            class="cursor-pointer rounded-lg bg-red-600 px-4 py-2 text-white transition hover:bg-red-500"
+          >
+            Logout
+          </a>
+          {% else %}
           <a href="/login" class="text-slate-300 transition hover:text-white">
             Login
           </a>
@@ -37,6 +52,7 @@
           >
             Register
           </a>
+          {% endif %}
         </nav>
       </div>
     </header>
@@ -44,6 +60,7 @@
     <!-- Individual Page Content -->
     <main>{% block content %}{% endblock %}</main>
 
+    <script src="/js/auth.js"></script>
     {% block scripts %}{% endblock %}
   </body>
 </html>

@@ -1,5 +1,4 @@
-
-from flask import Flask, render_template, send_from_directory
+from flask import Flask, render_template, send_from_directory, session, redirect, url_for
 from pathlib import Path
 
 from backend.database import initialize_database
@@ -11,6 +10,13 @@ app = Flask(
     __name__,
     template_folder=str(FRONTEND_FOLDER / "templates")
 )
+
+# Session configuration
+app.secret_key = "vulnerable-portal-secret-key"
+
+app.config["SESSION_COOKIE_HTTPONLY"] = False
+app.config["SESSION_COOKIE_SECURE"] = False
+app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 
 # Register API routes
 app.register_blueprint(auth_routes, url_prefix="/api")
@@ -24,15 +30,26 @@ def home():
 
 @app.route("/register")
 def register_page():
+
+    if "user_id" in session:
+        return redirect(url_for("dashboard_page"))
+
     return render_template("pages/register.html")
 
 
 @app.route("/login")
 def login_page():
+
+    if "user_id" in session:
+        return redirect(url_for("dashboard_page"))
+
     return render_template("pages/login.html")
 
 @app.route("/dashboard")
 def dashboard_page():
+    if "user_id" not in session:
+        return redirect(url_for("login_page"))
+
     return render_template("pages/dashboard.html")
 
 

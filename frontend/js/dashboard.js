@@ -1,12 +1,12 @@
-const params = new URLSearchParams(window.location.search);
-
-const username = params.get("username");
-
 async function loadDashboard() {
   const message = document.getElementById("message");
 
+  // Get username from URL query parameter
+  const urlParams = new URLSearchParams(window.location.search);
+  const username = urlParams.get("user");
+
   if (!username) {
-    message.textContent = "No username provided.";
+    message.textContent = "No username specified.";
     message.className = "mt-5 text-sm text-red-600";
     return;
   }
@@ -24,10 +24,9 @@ async function loadDashboard() {
       return;
     }
 
+    // Display user information
     document.getElementById("username").textContent = result.user.username;
-
     document.getElementById("user-id").textContent = result.user.id;
-
     document.getElementById("user-name").textContent = result.user.username;
   } catch (error) {
     console.error("Dashboard error:", error);

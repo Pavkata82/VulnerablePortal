@@ -31,11 +31,9 @@ async function registerUser(event) {
 
       document.getElementById("register-form").reset();
 
-      setTimeout(
-        () =>
-          (window.location.href = `/dashboard?username=${encodeURIComponent(username)}`),
-        3000,
-      );
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 3000);
     } else {
       message.textContent = result.message;
       message.className = "mb-5 text-sm rounded-lg bg-red-50 p-3 text-red-600";
@@ -70,7 +68,7 @@ async function loginUser(event) {
     const result = await response.json();
 
     if (response.ok) {
-      window.location.href = `/dashboard?username=${encodeURIComponent(username)}`;
+      window.location.href = `/dashboard?user=${encodeURIComponent(result.user.username)}`;
     } else {
       message.textContent = result.message;
       message.className = "mb-5 text-sm rounded-lg bg-red-50 p-3 text-red-600";
@@ -80,5 +78,19 @@ async function loginUser(event) {
 
     message.textContent = "Could not connect to the server.";
     message.className = "mb-5 text-sm rounded-lg bg-red-50 p-3 text-red-600";
+  }
+}
+
+async function logoutUser() {
+  try {
+    const response = await fetch(`${API_URL}/logout`, {
+      method: "POST",
+    });
+
+    if (response.ok) {
+      window.location.href = "/login";
+    }
+  } catch (error) {
+    console.error("Logout error:", error);
   }
 }

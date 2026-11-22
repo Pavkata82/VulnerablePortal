@@ -1,5 +1,4 @@
-
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, session
 import sqlite3
 
 from backend.database import get_db_connection
@@ -7,9 +6,9 @@ from backend.database import get_db_connection
 auth_routes = Blueprint("auth", __name__)
 
 
+# REGISTER
 @auth_routes.route("/register", methods=["POST"])
 def register():
-
     data = request.get_json(silent=True)
 
     if not data:
@@ -30,7 +29,6 @@ def register():
     connection = get_db_connection()
 
     try:
-
         connection.execute(
             "INSERT INTO users (username, password) VALUES (?, ?)",
             (username, password)
@@ -44,7 +42,6 @@ def register():
         }), 201
 
     except sqlite3.IntegrityError:
-
         return jsonify({
             "success": False,
             "message": "Username already exists."
@@ -53,9 +50,10 @@ def register():
     finally:
         connection.close()
 
+
+# LOGIN
 @auth_routes.route("/login", methods=["POST"])
 def login():
-
     data = request.get_json(silent=True)
 
     if not data:
@@ -76,29 +74,57 @@ def login():
     connection = get_db_connection()
 
     try:
-
         user = connection.execute(
             "SELECT * FROM users WHERE username = ? AND password = ?",
             (username, password)
         ).fetchone()
 
-        if user:
+        if not user:
             return jsonify({
-                "success": True,
-                "message": "Login successful!"
-            }), 200
+                "success": False,
+                "message": "Invalid username or password."
+            }), 401
+
+        # Create session
+        session["user_id"] = user["id"]
+        session["username"] = user["username"]
 
         return jsonify({
-            "success": False,
-            "message": "Invalid username or password."
-        }), 401
+            "success": True,
+            "message": "Login successful!",
+            "user": {
+                "id": user["id"],
+                "username": user["username"]
+            }
+        }), 200
 
     finally:
         connection.close()
 
+
+# LOGOUT
+@auth_routes.route("/logout", methods=["POST"])
+def logout():
+    session.clear()
+
+    return jsonify({
+        "success": True,
+        "message": "Logged out successfully."
+    }), 200
+
+
+# GET USER INFORMATION (INTENTIONALLY VULNERABLE TO IDOR)
 @auth_routes.route("/user", methods=["GET"])
 def get_user():
 
+    # Only check whether the user has an authenticated session
+    if "user_id" not in session:
+        return jsonify({
+            "success": False,
+            "message": "You must be logged in."
+        }), 401
+
+    # Get username from URL query parameter
     username = request.args.get("username")
 
     if not username:

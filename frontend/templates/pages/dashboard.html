@@ -1,7 +1,10 @@
 {% extends "base.html" %} {% block title %}Dashboard - VulnerablePortal{%
 endblock %} {% block content %}
 
-<section class="min-h-[calc(100vh-76px)] px-6 py-12">
+<section
+  class="min-h-[calc(100vh-76px)] px-6 py-12"
+  data-user-id="{{ session.get('user_id') }}"
+>
   <div class="mx-auto max-w-6xl">
     <!-- Dashboard Heading -->
     <div class="mb-10">
