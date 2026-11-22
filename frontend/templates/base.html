@@ -28,6 +28,7 @@
             Home
           </a>
 
+          {% if session.get("user_id") %}
           <a
             href="/comments"
             class="text-slate-300 transition hover:text-white"
@@ -35,7 +36,10 @@
             Comments
           </a>
 
-          {% if session.get("user_id") %}
+          <a href="/search" class="text-slate-300 transition hover:text-white">
+            Search
+          </a>
+
           <a
             href="{{ url_for('dashboard_page', user=session.get('username')) }}"
             class="text-slate-300 transition hover:text-white"

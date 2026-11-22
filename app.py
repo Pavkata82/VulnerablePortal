@@ -5,6 +5,7 @@ from backend.database import initialize_database
 from backend.routes.auth_routes import auth_routes
 from backend.routes.user_routes import user_routes
 from backend.routes.comments_routes import comments_routes
+from backend.routes.search_routes import search_routes
 
 FRONTEND_FOLDER = Path(__file__).resolve().parent / "frontend"
 
@@ -24,6 +25,7 @@ app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 app.register_blueprint(auth_routes, url_prefix="/api")
 app.register_blueprint(user_routes, url_prefix="/api")
 app.register_blueprint(comments_routes, url_prefix="/api")
+app.register_blueprint(search_routes, url_prefix="/api")
 
 @app.route("/favicon.ico")
 def favicon():
@@ -77,6 +79,10 @@ def add_comment_page():
         return redirect(url_for("login_page"))
 
     return render_template("pages/add_comment.html")
+
+@app.route("/search")
+def search_page():
+    return render_template("pages/search.html")
 
 
 # Static frontend files

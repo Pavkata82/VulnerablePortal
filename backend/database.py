@@ -23,8 +23,7 @@ def initialize_database():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT NOT NULL UNIQUE,
             password TEXT NOT NULL,
-            role TEXT NOT NULL DEFAULT 'user',
-            bio TEXT
+            role TEXT NOT NULL DEFAULT 'user'
         )
     """)
 
