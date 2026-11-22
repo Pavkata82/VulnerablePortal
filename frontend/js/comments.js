@@ -22,7 +22,9 @@ async function loadComments() {
       paragraphContent.className = "mt-2 text-lg font-semibold text-slate-900";
 
       paragraphUsername.textContent = comment.username;
-      paragraphContent.textContent = comment.content;
+
+      // Intentionally vulnerable to Stored XSS
+      paragraphContent.innerHTML = comment.content;
 
       comments.appendChild(paragraphUsername);
       comments.appendChild(paragraphContent);

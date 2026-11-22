@@ -1,79 +1,90 @@
-from flask import Blueprint, request, jsonify
-import sqlite3
+from flask import Blueprint, request, jsonify, session
 
 from backend.database import get_db_connection
 
 comments_routes = Blueprint("comments", __name__)
 
+
+# GET COMMENTS
 @comments_routes.route("/comments", methods=["GET"])
 def get_comments():
 
-  connection = get_db_connection()
+    if "user_id" not in session:
+        return jsonify({
+            "success": False,
+            "message": "You must be logged in."
+        }), 401
 
-  try:
-  
-    comments = connection.execute(
-       "SELECT * FROM comments"
-       ).fetchall()
+    connection = get_db_connection()
 
-    return jsonify({
+    try:
+        comments = connection.execute("""
+            SELECT comments.id, comments.content, users.username
+            FROM comments
+            JOIN users ON comments.user_id = users.id
+            ORDER BY comments.id DESC
+        """).fetchall()
+
+        return jsonify({
             "success": True,
-            "comments": [
-                dict(comment) for comment in comments
-            ]
+            "comments": [dict(comment) for comment in comments]
         }), 200
 
-  except sqlite3.IntegrityError:
+    finally:
+        connection.close()
 
-      return jsonify({
-          "success": False,
-          "message": "Unable to fetch comments."
-      }), 404
 
-  finally:
-      connection.close()
-
+# ADD COMMENT
 @comments_routes.route("/comments", methods=["POST"])
 def add_comment():
 
-  data = request.get_json(silent=True)
-  
-  if not data:
-      return jsonify({
-          "success": False,
-          "message": "Invalid request data."
-      }), 400
+    print("Session:", dict(session))
+    print("Received JSON:", request.get_json(silent=True))
 
-  username = data.get("username", "").strip()
-  content = data.get("content", "")
+    if "user_id" not in session:
+        print("ERROR: User is not logged in.")
+        return jsonify({
+            "success": False,
+            "message": "You must be logged in."
+        }), 401
 
-  if not username or not content:
-      return jsonify({
-          "success": False,
-          "message": "Username and content is required."
-      }), 400
 
-  connection = get_db_connection()
+    if "user_id" not in session:
+        return jsonify({
+            "success": False,
+            "message": "You must be logged in."
+        }), 401
 
-  try:
-  
-    connection.execute(
-        "INSERT INTO comments (username, content) VALUES (?, ?)",
-        (username, content)
-    )
+    data = request.get_json(silent=True)
 
-    connection.commit()
+    if not data:
+        return jsonify({
+            "success": False,
+            "message": "Invalid request data."
+        }), 400
 
-    return jsonify({
-        "success": True,
-        "message": "Comment successfully posted!"
-    }), 201
+    content = data.get("content", "").strip()
 
-  except sqlite3.IntegrityError:
-    return jsonify({
-        "success": False,
-        "message": "Unable to post comments."
-    }), 404
-  
-  finally:
-    connection.close()
+    if not content:
+        return jsonify({
+            "success": False,
+            "message": "Comment content is required."
+        }), 400
+
+    connection = get_db_connection()
+
+    try:
+        connection.execute(
+            "INSERT INTO comments (user_id, content) VALUES (?, ?)",
+            (session["user_id"], content)
+        )
+
+        connection.commit()
+
+        return jsonify({
+            "success": True,
+            "message": "Comment successfully posted!"
+        }), 201
+
+    finally:
+        connection.close()

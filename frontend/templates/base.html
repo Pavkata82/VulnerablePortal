@@ -6,6 +6,7 @@
 
     <title>{% block title %}VulnerablePortal{% endblock %}</title>
 
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="stylesheet" href="/css/tailwind.css" />
 
     {% block head %}{% endblock %}
@@ -34,16 +35,9 @@
             Comments
           </a>
 
-          <a
-            href="/comments"
-            class="text-slate-300 transition hover:text-white"
-          >
-            Comments
-          </a>
-
           {% if session.get("user_id") %}
           <a
-            href="/dashboard"
+            href="{{ url_for('dashboard_page', user=session.get('username')) }}"
             class="text-slate-300 transition hover:text-white"
           >
             Dashboard

@@ -3,6 +3,7 @@ from pathlib import Path
 
 from backend.database import initialize_database
 from backend.routes.auth_routes import auth_routes
+from backend.routes.user_routes import user_routes
 from backend.routes.comments_routes import comments_routes
 
 FRONTEND_FOLDER = Path(__file__).resolve().parent / "frontend"
@@ -21,7 +22,15 @@ app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 
 # Register API routes
 app.register_blueprint(auth_routes, url_prefix="/api")
+app.register_blueprint(user_routes, url_prefix="/api")
 app.register_blueprint(comments_routes, url_prefix="/api")
+
+@app.route("/favicon.ico")
+def favicon():
+    return send_from_directory(
+        FRONTEND_FOLDER / "images",
+        "favicon.ico"
+    )
 
 
 # Frontend routes
@@ -56,10 +65,17 @@ def dashboard_page():
 
 @app.route("/comments")
 def comments_page():
+    if "user_id" not in session:
+        return redirect(url_for("login_page"))
+
     return render_template("pages/comments.html")
+
 
 @app.route("/add_comment")
 def add_comment_page():
+    if "user_id" not in session:
+        return redirect(url_for("login_page"))
+
     return render_template("pages/add_comment.html")
 
 

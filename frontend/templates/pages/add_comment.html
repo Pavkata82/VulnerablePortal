@@ -19,23 +19,19 @@ endblock %} {% block content %}
       <div id="message" class="mt-5 text-sm"></div>
 
       <form id="register-form" onsubmit="addComment(event)">
-        <div class="mt-8 mb-8 grid gap-6 sm:grid-cols-2">
-          <input
-            class="rounded-xl bg-slate-50 p-5 outline-none text-sm font-medium text-slate-500"
-            id="username"
-            placeholder="Username"
-          />
-
-          <input
-            class="rounded-xl bg-slate-50 p-5 outline-none text-sm font-medium text-slate-500"
+        <div class="mt-8 mb-8">
+          <textarea
+            class="w-full rounded-xl bg-slate-50 p-5 text-sm font-medium text-slate-500 outline-none"
             id="content"
-            placeholder="Comment"
-          />
+            placeholder="Write your comment..."
+            rows="4"
+            required
+          ></textarea>
         </div>
 
         <button
           type="submit"
-          class="w-full rounded-lg bg-blue-600 px-4 py-3 font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200"
+          class="w-full rounded-lg bg-blue-600 px-4 py-3 font-semibold text-white transition hover:bg-blue-700"
         >
           Add Comment
         </button>
